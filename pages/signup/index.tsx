@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { setLogin } from '@/store/user';
 import SignUpForm from '@/components/forms/signup-form';
-import instance from '@/api/axios-instance';
+import handleFormSubmit from '@/helpers/form-helper';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
@@ -13,33 +12,13 @@ function SignUpPage(): JSX.Element {
     email: string,
     password: string,
   ): Promise<string> => {
-    try {
-      const res = await instance.post(
-        '/auth/signup',
-        JSON.stringify({ username, email, password }),
-      );
-
-      const response = res.data;
-      if (response.statusCode === 201) {
-        dispatch(
-          setLogin({
-            username: response.username,
-            accessToken: response.accessToken,
-          }),
-        );
-        router.push('/');
-      }
-    } catch (error) {
-      const response = error.response.data;
-      if (response.statusCode === 400) {
-        return response.message[0];
-      }
-      if (response.statusCode === 409) {
-        return response.message;
-      }
-      return response.message[0];
-    }
-    return '';
+    const response = await handleFormSubmit(
+      '/auth/signup',
+      { username, email, password },
+      router,
+      dispatch,
+    );
+    return response;
   };
   return <SignUpForm signUp={signUp} />;
 }
