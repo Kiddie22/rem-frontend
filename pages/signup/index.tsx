@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '@/store/user';
 import SignUpForm from '@/components/forms/signup-form';
+import instance from '@/api/axios-instance';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
@@ -12,29 +13,31 @@ function SignUpPage(): JSX.Element {
     email: string,
     password: string,
   ): Promise<string> => {
-    const res = await fetch('http://localhost:3000/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, email, password }),
-    });
-    const response = await res.json();
-
-    if (response.statusCode === 400) {
-      return response.message[0];
-    }
-    if (response.statusCode === 409) {
-      return response.message;
-    }
-    if (response.statusCode === 201) {
-      dispatch(
-        setLogin({
-          username: response.username,
-          accessToken: response.accessToken,
-        }),
+    try {
+      const res = await instance.post(
+        '/auth/signup',
+        JSON.stringify({ username, email, password }),
       );
-      router.push('/');
+
+      const response = res.data;
+      if (response.statusCode === 201) {
+        dispatch(
+          setLogin({
+            username: response.username,
+            accessToken: response.accessToken,
+          }),
+        );
+        router.push('/');
+      }
+    } catch (error) {
+      const response = error.response.data;
+      if (response.statusCode === 400) {
+        return response.message[0];
+      }
+      if (response.statusCode === 409) {
+        return response.message;
+      }
+      return response.message[0];
     }
     return '';
   };
