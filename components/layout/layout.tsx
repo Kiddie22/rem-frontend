@@ -1,7 +1,6 @@
-import React from 'react';
-import Navbar from './navbar';
-import { Fragment } from 'react';
+import React, { ReactNode } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
+import Navbar from './navbar';
 
 const theme = createTheme({
   palette: {
@@ -9,15 +8,16 @@ const theme = createTheme({
   },
 });
 
-const Layout = (props: any) => {
+function Layout(props: { children: ReactNode }): JSX.Element {
+  const { children } = props;
   return (
     <ThemeProvider theme={theme}>
-      <Fragment>
+      <>
         <Navbar />
-        <main>{props.children}</main>
-      </Fragment>
+        <main>{children}</main>
+      </>
     </ThemeProvider>
   );
-};
+}
 
 export default Layout;

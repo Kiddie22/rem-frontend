@@ -2,41 +2,39 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import { useSelector, useDispatch } from 'react-redux';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import { RootState } from '@/store/store';
+import { setLogout } from '@/store/user';
 
-const pages = ['login', 'signup'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['My Properties'];
+const auth = ['login', 'signup'];
 
-function Navbar() {
+function Navbar(): JSX.Element {
+  const dispatch = useDispatch();
+  const username = useSelector((state: RootState) => state.user.username);
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (): void => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const logOut = (): void => {
+    dispatch(setLogout());
   };
 
   return (
@@ -59,7 +57,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            REM | 
+            REM |
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -115,13 +113,13 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            REM |
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                href={`/${page}`}
+                href="/"
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
@@ -131,33 +129,34 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {username ? (
+              <Typography>
+                Welcome, {username}
+                <Button
+                  href="/"
+                  onClick={logOut}
+                  sx={{ mx: 3, color: 'white' }}
+                  style={{
+                    backgroundColor: '#5c85c2',
+                  }}
+                >
+                  Logout
+                </Button>
+              </Typography>
+            ) : (
+              <>
+                {auth.map((item) => (
+                  <Button
+                    key={item}
+                    href={`/${item}`}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white' }}
+                  >
+                    {item}
+                  </Button>
+                ))}
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>

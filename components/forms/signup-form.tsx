@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import { Alert } from '@mui/material';
-import { useRouter } from 'next/router';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -12,12 +11,19 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-const SignUpForm = (props: { signUp: any }) => {
+function SignUpForm(props: {
+  signUp: (
+    username: string,
+    email: string,
+    password: string,
+  ) => Promise<string>;
+}): JSX.Element {
   const { signUp } = props;
-  const router = useRouter();
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const [username, email, password] = [
@@ -25,15 +31,13 @@ const SignUpForm = (props: { signUp: any }) => {
       data.get('email'),
       data.get('password'),
     ];
-    const response = await signUp(username, email, password);
-    console.log(response);
-    if (response.statusCode === 400) {
-      setErrorMessage(response.message[0]);
-    } else if (response.statusCode === 409) {
-      setErrorMessage(response.message);
-    }
-    if (response.statusCode === 201) {
-      router.push('/');
+    const responseMessage = await signUp(
+      String(username),
+      String(email),
+      String(password),
+    );
+    if (responseMessage) {
+      setErrorMessage(responseMessage);
     }
   };
 
@@ -111,6 +115,6 @@ const SignUpForm = (props: { signUp: any }) => {
       </Box>
     </Container>
   );
-};
+}
 
 export default SignUpForm;
