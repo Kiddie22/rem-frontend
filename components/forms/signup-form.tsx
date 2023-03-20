@@ -41,9 +41,9 @@ function SignUpForm(props: { signUp: SignUpFunction }): JSX.Element {
   return (
     <CustomForm title="Sign Up">
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <CustomTextField id="username" label="Username" />
-        <CustomTextField id="email" label="Email Address" />
-        <CustomTextField id="password" label="Password" />
+        <CustomTextField id="username" label="Username" type="text" />
+        <CustomTextField id="email" label="Email Address" type="text" />
+        <CustomTextField id="password" label="Password" type="password" />
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <CustomSubmitButton>Sign Up</CustomSubmitButton>
         <CustomSignUpFooter />

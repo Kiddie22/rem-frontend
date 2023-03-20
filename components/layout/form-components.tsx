@@ -43,8 +43,9 @@ export function CustomForm(props: {
 export function CustomTextField(props: {
   id: string;
   label: string;
+  type: string;
 }): JSX.Element {
-  const { id, label } = props;
+  const { id, label, type } = props;
   return (
     <TextField
       margin="normal"
@@ -55,6 +56,7 @@ export function CustomTextField(props: {
       name={id}
       autoComplete={id}
       autoFocus
+      type={type}
     />
   );
 }

@@ -28,8 +28,8 @@ function LoginForm(props: { login: LoginFunction }): JSX.Element {
   return (
     <CustomForm title="Log In">
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <CustomTextField id="username" label="Username" />
-        <CustomTextField id="password" label="Password" />
+        <CustomTextField id="username" label="Username" type="text" />
+        <CustomTextField id="password" label="Password" type="password" />
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <CustomSubmitButton>Sign In</CustomSubmitButton>
         <CustomLoginFooter />
