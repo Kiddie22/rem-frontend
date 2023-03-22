@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Avatar,
@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { fieldToTextField, TextFieldProps } from 'formik-mui';
 
 export function CustomForm(props: {
   title: string;
@@ -40,33 +41,46 @@ export function CustomForm(props: {
   );
 }
 
-export function CustomTextField(props: {
-  id: string;
-  label: string;
-  type: string;
-}): JSX.Element {
-  const { id, label, type } = props;
+export function CustomTextField(props: TextFieldProps): JSX.Element {
+  const {
+    form: { setFieldValue },
+    field: { name },
+  } = props;
+  const onChange = React.useCallback(
+    (event: { target: { value: string } }) => {
+      const { value } = event.target;
+      setFieldValue(name, value || '');
+    },
+    [setFieldValue, name],
+  );
   return (
     <TextField
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...fieldToTextField(props)}
+      onChange={onChange}
       margin="normal"
       required
       fullWidth
-      id={id}
-      label={label}
-      name={id}
-      autoComplete={id}
       autoFocus
-      type={type}
     />
   );
 }
 
 export function CustomSubmitButton(props: {
   children: ReactNode;
+  isSubmitting: boolean;
+  submitForm: () => Promise<void>;
 }): JSX.Element {
-  const { children } = props;
+  const { children, isSubmitting, submitForm } = props;
   return (
-    <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 3 }}>
+    <Button
+      type="submit"
+      fullWidth
+      variant="contained"
+      disabled={isSubmitting}
+      onClick={submitForm}
+      sx={{ mt: 1, mb: 3 }}
+    >
       {children}
     </Button>
   );

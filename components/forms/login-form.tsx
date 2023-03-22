@@ -1,40 +1,78 @@
 import * as React from 'react';
-import { Alert, Box } from '@mui/material';
+import * as yup from 'yup';
+import { Alert, LinearProgress } from '@mui/material';
+import { Field, Form, Formik } from 'formik';
 import {
   CustomForm,
-  CustomLoginFooter,
-  CustomSubmitButton,
   CustomTextField,
+  CustomSubmitButton,
+  CustomLoginFooter,
 } from '../layout/form-components';
 
 // Type Declarations
 type LoginFunction = (username: string, password: string) => Promise<string>;
-type Event = React.FormEvent<HTMLFormElement>;
+type Values = { username: string; password: string };
+
+const initialLoginValues = {
+  username: '',
+  password: '',
+};
+
+const loginSchema = yup.object({
+  username: yup.mixed().required('Required'),
+  password: yup.string().required('Required'),
+});
 
 function LoginForm(props: { login: LoginFunction }): JSX.Element {
   const { login } = props;
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const handleSubmit = async (event: Event): Promise<void> => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const [username, password] = [data.get('username'), data.get('password')];
-    const responseMessage = await login(String(username), String(password));
+  const handleFormSubmit = async (
+    values: Values,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+  ): Promise<void> => {
+    const { username, password } = values;
+    const responseMessage = await login(username, password);
+    setSubmitting(false);
     if (responseMessage) {
       setErrorMessage(responseMessage);
     }
   };
 
   return (
-    <CustomForm title="Log In">
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <CustomTextField id="username" label="Username" type="text" />
-        <CustomTextField id="password" label="Password" type="password" />
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        <CustomSubmitButton>Sign In</CustomSubmitButton>
-        <CustomLoginFooter />
-      </Box>
-    </CustomForm>
+    <Formik
+      initialValues={initialLoginValues}
+      onSubmit={handleFormSubmit}
+      validationSchema={loginSchema}
+    >
+      {({ submitForm, isSubmitting }): JSX.Element => (
+        <CustomForm title="Log In">
+          <Form>
+            <Field
+              component={CustomTextField}
+              name="username"
+              type="text"
+              label="Username"
+            />
+            <Field
+              component={CustomTextField}
+              name="password"
+              type="password"
+              label="Password"
+            />
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            {isSubmitting && <LinearProgress />}
+            <CustomSubmitButton
+              isSubmitting={isSubmitting}
+              submitForm={submitForm}
+            >
+              Sign In
+            </CustomSubmitButton>
+            <CustomLoginFooter />
+          </Form>
+        </CustomForm>
+      )}
+    </Formik>
   );
 }
 
