@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { Roboto } from 'next/font/google';
 import Navbar from './navbar';
 
 const theme = createTheme({
@@ -8,13 +9,20 @@ const theme = createTheme({
   },
 });
 
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
 function Layout(props: { children: ReactNode }): JSX.Element {
   const { children } = props;
   return (
     <ThemeProvider theme={theme}>
       <>
         <Navbar />
-        <main>{children}</main>
+        <main className={roboto.className}>{children}</main>
       </>
     </ThemeProvider>
   );
