@@ -16,7 +16,6 @@ export default function CustomTextField(props: TextFieldProps): JSX.Element {
   );
   return (
     <TextField
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...fieldToTextField(props)}
       onChange={onChange}
       margin="normal"

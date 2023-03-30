@@ -9,7 +9,7 @@ type SignUpFunction = (
   username: string,
   email: string,
   password: string,
-) => Promise<string>;
+) => Promise<string | null>;
 
 type Values = {
   username: string;
@@ -39,10 +39,14 @@ function SignUpForm(props: { signUp: SignUpFunction }): JSX.Element {
   ): Promise<void> => {
     const { username, email, password } = values;
     const responseMessage = await signUp(username, email, password);
-    setSubmitting(false);
     if (responseMessage) {
-      setErrorMessage(responseMessage);
+      if (Array.isArray(responseMessage)) {
+        setErrorMessage(responseMessage[0]);
+      } else {
+        setErrorMessage(responseMessage);
+      }
     }
+    setSubmitting(false);
   };
 
   return (

@@ -5,7 +5,11 @@ import { Field, Form, Formik } from 'formik';
 import FormComponents from '../layout/form-components';
 
 // Type Declarations
-type LoginFunction = (username: string, password: string) => Promise<string>;
+type LoginFunction = (
+  username: string,
+  password: string,
+) => Promise<string | null>;
+
 type Values = { username: string; password: string };
 
 const initialLoginValues = {
@@ -28,10 +32,14 @@ function LoginForm(props: { login: LoginFunction }): JSX.Element {
   ): Promise<void> => {
     const { username, password } = values;
     const responseMessage = await login(username, password);
-    setSubmitting(false);
     if (responseMessage) {
-      setErrorMessage(responseMessage);
+      if (Array.isArray(responseMessage)) {
+        setErrorMessage(responseMessage[0]);
+      } else {
+        setErrorMessage(responseMessage);
+      }
     }
+    setSubmitting(false);
   };
 
   return (
