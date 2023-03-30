@@ -2,12 +2,7 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Alert, LinearProgress } from '@mui/material';
-import {
-  CustomForm,
-  CustomTextField,
-  CustomSubmitButton,
-  CustomSignUpFooter,
-} from '../layout/form-components';
+import FormComponents from '../layout/form-components';
 
 // Type Declarations
 type SignUpFunction = (
@@ -57,37 +52,37 @@ function SignUpForm(props: { signUp: SignUpFunction }): JSX.Element {
       validationSchema={signUpSchema}
     >
       {({ submitForm, isSubmitting }): JSX.Element => (
-        <CustomForm title="Sign Up">
+        <FormComponents.CustomForm title="Sign Up">
           <Form>
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="username"
               type="text"
               label="Username"
             />
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="email"
               type="email"
               label="Email"
             />
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="password"
               type="password"
               label="Password"
             />
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
             {isSubmitting && <LinearProgress />}
-            <CustomSubmitButton
+            <FormComponents.CustomSubmitButton
               isSubmitting={isSubmitting}
               submitForm={submitForm}
             >
               Sign Up
-            </CustomSubmitButton>
-            <CustomSignUpFooter />
+            </FormComponents.CustomSubmitButton>
+            <FormComponents.CustomSignUpFooter />
           </Form>
-        </CustomForm>
+        </FormComponents.CustomForm>
       )}
     </Formik>
   );

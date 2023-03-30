@@ -2,12 +2,7 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { Alert, LinearProgress } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
-import {
-  CustomForm,
-  CustomTextField,
-  CustomSubmitButton,
-  CustomLoginFooter,
-} from '../layout/form-components';
+import FormComponents from '../layout/form-components';
 
 // Type Declarations
 type LoginFunction = (username: string, password: string) => Promise<string>;
@@ -46,31 +41,31 @@ function LoginForm(props: { login: LoginFunction }): JSX.Element {
       validationSchema={loginSchema}
     >
       {({ submitForm, isSubmitting }): JSX.Element => (
-        <CustomForm title="Log In">
+        <FormComponents.CustomForm title="Log In">
           <Form>
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="username"
               type="text"
               label="Username"
             />
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="password"
               type="password"
               label="Password"
             />
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
             {isSubmitting && <LinearProgress />}
-            <CustomSubmitButton
+            <FormComponents.CustomSubmitButton
               isSubmitting={isSubmitting}
               submitForm={submitForm}
             >
               Sign In
-            </CustomSubmitButton>
-            <CustomLoginFooter />
+            </FormComponents.CustomSubmitButton>
+            <FormComponents.CustomLoginFooter />
           </Form>
-        </CustomForm>
+        </FormComponents.CustomForm>
       )}
     </Formik>
   );
