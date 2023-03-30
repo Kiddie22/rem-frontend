@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface User {
-  username: string;
+  // username: string;
   accessToken: string;
 }
 
 const initialState: User = {
-  username: '',
+  // username: '',
   accessToken: '',
 };
 
@@ -15,15 +15,12 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setLogin: (
-      state: User,
-      action: PayloadAction<{ username: string; accessToken: string }>,
-    ) => {
-      state.username = action.payload.username;
+    setLogin: (state: User, action: PayloadAction<{ accessToken: string }>) => {
+      // state.username = action.payload.username;
       state.accessToken = action.payload.accessToken;
     },
     setLogout: (state: User) => {
-      state.username = '';
+      // state.username = '';
       state.accessToken = '';
     },
   },

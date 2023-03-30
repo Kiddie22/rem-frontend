@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { store } from '@/store/store';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
@@ -8,7 +9,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    const accessToken = window.localStorage.getItem('accessToken');
+    const { accessToken } = store.getState().user;
     const authHeader = `Bearer ${accessToken}`;
     const returnConfig = config;
     returnConfig.headers.Authorization = authHeader;
@@ -23,7 +24,12 @@ const getNewAccessToken = async (): Promise<void> => {
   try {
     const res = await instance.get('auth/refresh');
     const { accessToken } = res.data;
-    if (accessToken) window.localStorage.setItem('accessToken', accessToken);
+    if (accessToken) {
+      store.dispatch({
+        type: 'user/setLogin',
+        payload: { accessToken },
+      });
+    }
   } catch (error) {
     window.location.href = '/login';
   }

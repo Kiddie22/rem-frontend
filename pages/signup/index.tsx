@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import SignUpForm from '@/components/forms/signup-form';
 import instance from '@/api/axios-instance';
+import { setLogin } from '@/store/user';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const signUp = async (
     username: string,
@@ -17,7 +20,7 @@ function SignUpPage(): JSX.Element {
         password,
       });
       const { accessToken } = response.data;
-      localStorage.setItem('accessToken', accessToken);
+      dispatch(setLogin({ accessToken }));
       router.push('/');
       return null;
     } catch (error) {
