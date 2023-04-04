@@ -3,23 +3,19 @@ import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import { useSelector, useDispatch } from 'react-redux';
 import Toolbar from '@mui/material/Toolbar';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { RootState } from '@/store/store';
-import { setLogout } from '@/store/user';
+import useAuthData from '@/hooks/useAuthData';
 
 const pages = ['My Properties'];
-const auth = ['login', 'signup'];
+const authNav = ['login', 'signup'];
 
 function Navbar(): JSX.Element {
-  const dispatch = useDispatch();
-  const username = useSelector((state: RootState) => state.user.username);
+  const auth = useAuthData();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -33,15 +29,10 @@ function Navbar(): JSX.Element {
     setAnchorElNav(null);
   };
 
-  const logOut = (): void => {
-    dispatch(setLogout());
-  };
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -96,7 +87,6 @@ function Navbar(): JSX.Element {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -113,7 +103,7 @@ function Navbar(): JSX.Element {
               textDecoration: 'none',
             }}
           >
-            REM |
+            REM
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -129,9 +119,9 @@ function Navbar(): JSX.Element {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {username ? (
+            {auth?.user ? (
               <Typography>
-                Welcome, {username}
+                Welcome, {auth.user.username}
                 <Button
                   href="/"
                   onClick={logOut}
@@ -145,7 +135,7 @@ function Navbar(): JSX.Element {
               </Typography>
             ) : (
               <>
-                {auth.map((item) => (
+                {authNav.map((item) => (
                   <Button
                     key={item}
                     href={`/${item}`}
