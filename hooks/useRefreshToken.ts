@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { instance } from '@/api/axios-instance';
+import instance from '@/api/axios-instance';
 import useAuthApi from './useAuthApi';
 
 const useRefreshToken = (): (() => Promise<string | null>) => {

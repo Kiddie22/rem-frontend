@@ -1,8 +1,8 @@
 import { AxiosInstance } from 'axios';
 import { useEffect } from 'react';
-import { instance } from '@/api/axios-instance';
 import useAuthData from './useAuthData';
 import useRefreshToken from './useRefreshToken';
+import instance from '@/api/axios-instance';
 
 const useAxiosInstance = (): AxiosInstance => {
   const refreshTokens = useRefreshToken();

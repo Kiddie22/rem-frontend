@@ -1,18 +1,19 @@
 import { useRouter } from 'next/router';
 import LoginForm from '@/components/forms/login-form';
-import axios from '@/api/axios-instance';
 import useAuthApi from '@/hooks/useAuthApi';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
 
 function LoginPage(): JSX.Element {
   const router = useRouter();
   const setAuth = useAuthApi();
+  const instance = useAxiosInstance();
 
   const login = async (
     username: string,
     password: string,
   ): Promise<string | null> => {
     try {
-      const response = await axios.post('/auth/login', { username, password });
+      const response = await instance.post('/auth/login', { username, password });
       const { user, accessToken } = response.data;
       setAuth({ user, accessToken });
       router.push('/');

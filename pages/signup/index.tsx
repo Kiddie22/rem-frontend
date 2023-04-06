@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
 import SignUpForm from '@/components/forms/signup-form';
-import axios from '@/api/axios-instance';
 import useAuthApi from '@/hooks/useAuthApi';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
   const setAuth = useAuthApi();
+  const instance = useAxiosInstance();
 
   const signUp = async (
     username: string,
@@ -13,7 +14,7 @@ function SignUpPage(): JSX.Element {
     password: string,
   ): Promise<string | null> => {
     try {
-      const response = await axios.post('/auth/signup', {
+      const response = await instance.post('/auth/signup', {
         username,
         email,
         password,
