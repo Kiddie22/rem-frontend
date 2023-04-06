@@ -1,13 +1,10 @@
-import Head from 'next/head';
+import { Container } from '@mui/material';
 
 function Home(): JSX.Element {
   return (
-    <>
-      <Head>
-        <meta name="description" content="Real Estate Management App" />
-      </Head>
-      <main />
-    </>
+    <Container component="main" maxWidth="xs">
+      <h1>Home</h1>
+    </Container>
   );
 }
 
