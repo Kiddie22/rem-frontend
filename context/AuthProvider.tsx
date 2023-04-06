@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction, createContext, useState } from 'react';
+import { createContext, useState } from 'react';
+import { AuthContextApiType, AuthContextDataType } from '@/utils/auth-utils';
 
-export const AuthContextData = createContext<object>({});
-export const AuthContextApi = createContext<Dispatch<SetStateAction<object>>>(
+export const AuthContextData = createContext<AuthContextDataType>({});
+
+export const AuthContextApi = createContext<AuthContextApiType>(
   () => undefined,
 );
 

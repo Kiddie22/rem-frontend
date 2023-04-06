@@ -1,9 +1,11 @@
 import Link from 'next/link';
 
-export default function CustomLink(props: {
+type CustomLinkProps = {
   href: string;
   label: string;
-}): JSX.Element {
+};
+
+export default function CustomLink(props: CustomLinkProps): JSX.Element {
   const { href, label } = props;
   return (
     <Link

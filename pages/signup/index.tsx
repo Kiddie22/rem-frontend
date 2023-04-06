@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import SignUpForm from '@/components/forms/signup-form';
 import useAuthApi from '@/hooks/useAuthApi';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { ReturnType } from '@/utils/form-utils';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
@@ -12,7 +13,7 @@ function SignUpPage(): JSX.Element {
     username: string,
     email: string,
     password: string,
-  ): Promise<string | null> => {
+  ): Promise<ReturnType> => {
     try {
       const response = await instance.post('/auth/signup', {
         username,

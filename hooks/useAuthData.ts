@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AuthContextData } from '@/context/AuthProvider';
+import { AuthContextDataType } from '@/utils/auth-utils';
 
-const useAuthData = (): object => useContext(AuthContextData);
+const useAuthData = (): AuthContextDataType => useContext(AuthContextData);
 
 export default useAuthData;

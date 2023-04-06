@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useContext } from 'react';
+import { useContext } from 'react';
 import { AuthContextApi } from '@/context/AuthProvider';
+import { AuthContextApiType } from '@/utils/auth-utils';
 
-const useAuthApi = (): Dispatch<SetStateAction<object>> =>
-  useContext(AuthContextApi);
+const useAuthApi = (): AuthContextApiType => useContext(AuthContextApi);
 
 export default useAuthApi;

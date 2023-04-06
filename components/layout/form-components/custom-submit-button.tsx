@@ -1,11 +1,15 @@
 import { Button } from '@mui/material';
 import { ReactNode } from 'react';
 
-export default function CustomSubmitButton(props: {
+type CustomSubmitButtonProps = {
   children: ReactNode;
   isSubmitting: boolean;
   submitForm: () => Promise<void>;
-}): JSX.Element {
+};
+
+export default function CustomSubmitButton(
+  props: CustomSubmitButtonProps,
+): JSX.Element {
   const { children, isSubmitting, submitForm } = props;
   return (
     <Button

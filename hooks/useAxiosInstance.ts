@@ -6,15 +6,16 @@ import instance from '@/api/axios-instance';
 
 const useAxiosInstance = (): AxiosInstance => {
   const refreshTokens = useRefreshToken();
-  const auth = useAuthData();
+  const { accessToken } = useAuthData();
 
   useEffect(() => {
     const requestIntercept = instance.interceptors.request.use(
       (config) => {
-        if (!config.headers.Authorization) {
-          config.headers.Authorization = `Bearer ${auth.accessToken}`;
+        const newConfig = { ...config };
+        if (!newConfig.headers.Authorization) {
+          newConfig.headers.Authorization = `Bearer ${accessToken}`;
         }
-        return config;
+        return newConfig;
       },
       (error) => Promise.reject(error),
     );
@@ -29,9 +30,6 @@ const useAxiosInstance = (): AxiosInstance => {
           (err.response.status === 403 && errData) ||
           (err.response.status === 409 && errData)
         ) {
-          if (err.request.responseURL.includes('auth/login')) {
-            errData.message = 'Invalid credentials';
-          }
           return Promise.reject(errData.message);
         }
 
@@ -57,7 +55,7 @@ const useAxiosInstance = (): AxiosInstance => {
       instance.interceptors.request.eject(requestIntercept);
       instance.interceptors.response.eject(responseIntercept);
     };
-  }, [auth, refreshTokens]);
+  }, [accessToken, refreshTokens]);
 
   return instance;
 };

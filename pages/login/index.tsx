@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import LoginForm from '@/components/forms/login-form';
 import useAuthApi from '@/hooks/useAuthApi';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { ReturnType } from '@/utils/form-utils';
 
 function LoginPage(): JSX.Element {
   const router = useRouter();
@@ -11,9 +12,12 @@ function LoginPage(): JSX.Element {
   const login = async (
     username: string,
     password: string,
-  ): Promise<string | null> => {
+  ): Promise<ReturnType> => {
     try {
-      const response = await instance.post('/auth/login', { username, password });
+      const response = await instance.post('/auth/login', {
+        username,
+        password,
+      });
       const { user, accessToken } = response.data;
       setAuth({ user, accessToken });
       router.push('/');
