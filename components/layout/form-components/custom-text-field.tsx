@@ -8,7 +8,7 @@ export default function CustomTextField(props: TextFieldProps): JSX.Element {
     field: { name },
   } = props;
   const onChange = React.useCallback(
-    (event: { target }) => {
+    (event) => {
       const { value } = event.target;
       setFieldValue(name, value || '');
     },
