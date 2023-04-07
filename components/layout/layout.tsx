@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { Roboto } from 'next/font/google';
 import Navbar from './navbar';
 
@@ -22,6 +22,7 @@ function Layout(props: { children: ReactNode }): JSX.Element {
     <ThemeProvider theme={theme}>
       <>
         <Navbar />
+        <CssBaseline />
         <main className={roboto.className}>{children}</main>
       </>
     </ThemeProvider>

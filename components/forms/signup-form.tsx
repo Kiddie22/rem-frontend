@@ -1,21 +1,14 @@
-import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Alert, LinearProgress } from '@mui/material';
 import FormComponents from '../layout/form-components';
-
-// Type Declarations
-type SignUpFunction = (
-  username: string,
-  email: string,
-  password: string,
-) => Promise<string>;
-
-type Values = {
-  username: string;
-  email: string;
-  password: string;
-};
+import {
+  SignUpProps,
+  SignUpValues,
+  SetSubmitting,
+  extractResponse,
+} from '@/utils/form-utils';
 
 const initialSignUpValues = {
   username: '',
@@ -29,20 +22,21 @@ const signUpSchema = yup.object({
   password: yup.string().required('Required'),
 });
 
-function SignUpForm(props: { signUp: SignUpFunction }): JSX.Element {
+function SignUpForm(props: SignUpProps): JSX.Element {
   const { signUp } = props;
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFormSubmit = async (
-    values: Values,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    values: SignUpValues,
+    { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
     const { username, email, password } = values;
     const responseMessage = await signUp(username, email, password);
-    setSubmitting(false);
     if (responseMessage) {
-      setErrorMessage(responseMessage);
+      const response = extractResponse(responseMessage);
+      setErrorMessage(response);
     }
+    setSubmitting(false);
   };
 
   return (

@@ -1,12 +1,14 @@
-import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { Alert, LinearProgress } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
 import FormComponents from '../layout/form-components';
-
-// Type Declarations
-type LoginFunction = (username: string, password: string) => Promise<string>;
-type Values = { username: string; password: string };
+import {
+  LoginProps,
+  LoginValues,
+  SetSubmitting,
+  extractResponse,
+} from '@/utils/form-utils';
 
 const initialLoginValues = {
   username: '',
@@ -18,20 +20,21 @@ const loginSchema = yup.object({
   password: yup.string().required('Required'),
 });
 
-function LoginForm(props: { login: LoginFunction }): JSX.Element {
+function LoginForm(props: LoginProps): JSX.Element {
   const { login } = props;
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFormSubmit = async (
-    values: Values,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    values: LoginValues,
+    { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
     const { username, password } = values;
     const responseMessage = await login(username, password);
-    setSubmitting(false);
     if (responseMessage) {
-      setErrorMessage(responseMessage);
+      const response = extractResponse(responseMessage);
+      setErrorMessage(response);
     }
+    setSubmitting(false);
   };
 
   return (
