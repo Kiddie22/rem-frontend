@@ -1,10 +1,22 @@
 import * as React from 'react';
-import { Box, AppBar, Toolbar, Typography, Chip } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Chip, Button } from '@mui/material';
+import { useRouter } from 'next/router';
 import useAuthData from '@/hooks/useAuthData';
 import FormComponents from './form-components';
+import useAuthApi from '@/hooks/useAuthApi';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
 
 function Navbar(): JSX.Element {
+  const router = useRouter();
+  const setAuth = useAuthApi();
   const { user } = useAuthData();
+  const instance = useAxiosInstance();
+
+  const logout = async (): Promise<void> => {
+    await instance.get('auth/logout');
+    setAuth({});
+    router.push('/login');
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -14,10 +26,15 @@ function Navbar(): JSX.Element {
             <FormComponents.CustomLink href="/" label="REM" />
           </Typography>
 
+          {user?.role === 'owner' && <Chip label="OWNER" color="success" />}
+          {user?.role === 'tenant' && <Chip label="TENANT" color="error" />}
+
           {user?.username ? (
             <>
               <Chip label={`Welcome ${user.username}`} />
-              <FormComponents.CustomLink href="/logout" label="Logout" />
+              <Button onClick={logout} variant="contained" color="info">
+                Logout
+              </Button>
             </>
           ) : (
             <>

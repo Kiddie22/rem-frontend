@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import * as yup from 'yup';
 import { Field, Form, Formik } from 'formik';
-import { Alert, LinearProgress } from '@mui/material';
+import { Alert, LinearProgress, Typography } from '@mui/material';
+import { Checkbox } from 'formik-mui';
 import FormComponents from '../layout/form-components';
 import {
   SignUpProps,
@@ -14,6 +15,7 @@ const initialSignUpValues = {
   username: '',
   email: '',
   password: '',
+  isOwner: false,
 };
 
 const signUpSchema = yup.object({
@@ -30,8 +32,8 @@ function SignUpForm(props: SignUpProps): JSX.Element {
     values: SignUpValues,
     { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
-    const { username, email, password } = values;
-    const responseMessage = await signUp(username, email, password);
+    const { username, email, password, isOwner } = values;
+    const responseMessage = await signUp(username, email, password, isOwner);
     if (responseMessage) {
       const response = extractResponse(responseMessage);
       setErrorMessage(response);
@@ -66,6 +68,10 @@ function SignUpForm(props: SignUpProps): JSX.Element {
               type="password"
               label="Password"
             />
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+              <Field component={Checkbox} type="checkbox" name="isOwner" />
+              <Typography>Owner</Typography>
+            </span>
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
             {isSubmitting && <LinearProgress />}
             <FormComponents.CustomSubmitButton

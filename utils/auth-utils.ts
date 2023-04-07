@@ -7,6 +7,7 @@ export type AuthContextDataType =
         id: string;
         username: string;
         email: string;
+        role: string;
       };
     }
   | Record<string, never>;
