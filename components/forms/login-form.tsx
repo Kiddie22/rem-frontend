@@ -1,17 +1,14 @@
-import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { Alert, LinearProgress } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
+import FormComponents from '../layout/form-components';
 import {
-  CustomForm,
-  CustomTextField,
-  CustomSubmitButton,
-  CustomLoginFooter,
-} from '../layout/form-components';
-
-// Type Declarations
-type LoginFunction = (username: string, password: string) => Promise<string>;
-type Values = { username: string; password: string };
+  LoginProps,
+  LoginValues,
+  SetSubmitting,
+  extractResponse,
+} from '@/utils/form-utils';
 
 const initialLoginValues = {
   username: '',
@@ -23,20 +20,21 @@ const loginSchema = yup.object({
   password: yup.string().required('Required'),
 });
 
-function LoginForm(props: { login: LoginFunction }): JSX.Element {
+function LoginForm(props: LoginProps): JSX.Element {
   const { login } = props;
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleFormSubmit = async (
-    values: Values,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    values: LoginValues,
+    { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
     const { username, password } = values;
     const responseMessage = await login(username, password);
-    setSubmitting(false);
     if (responseMessage) {
-      setErrorMessage(responseMessage);
+      const response = extractResponse(responseMessage);
+      setErrorMessage(response);
     }
+    setSubmitting(false);
   };
 
   return (
@@ -46,31 +44,31 @@ function LoginForm(props: { login: LoginFunction }): JSX.Element {
       validationSchema={loginSchema}
     >
       {({ submitForm, isSubmitting }): JSX.Element => (
-        <CustomForm title="Log In">
+        <FormComponents.CustomForm title="Log In">
           <Form>
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="username"
               type="text"
               label="Username"
             />
             <Field
-              component={CustomTextField}
+              component={FormComponents.CustomTextField}
               name="password"
               type="password"
               label="Password"
             />
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
             {isSubmitting && <LinearProgress />}
-            <CustomSubmitButton
+            <FormComponents.CustomSubmitButton
               isSubmitting={isSubmitting}
               submitForm={submitForm}
             >
               Sign In
-            </CustomSubmitButton>
-            <CustomLoginFooter />
+            </FormComponents.CustomSubmitButton>
+            <FormComponents.CustomLoginFooter />
           </Form>
-        </CustomForm>
+        </FormComponents.CustomForm>
       )}
     </Formik>
   );

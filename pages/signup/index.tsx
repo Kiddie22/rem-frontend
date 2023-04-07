@@ -1,24 +1,32 @@
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
 import SignUpForm from '@/components/forms/signup-form';
-import handleFormSubmit from '@/helpers/form-helper';
+import useAuthApi from '@/hooks/useAuthApi';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { ReturnType } from '@/utils/form-utils';
 
 function SignUpPage(): JSX.Element {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const setAuth = useAuthApi();
+  const instance = useAxiosInstance();
 
   const signUp = async (
     username: string,
     email: string,
     password: string,
-  ): Promise<string> => {
-    const response = await handleFormSubmit(
-      '/auth/signup',
-      { username, email, password },
-      router,
-      dispatch,
-    );
-    return response;
+  ): Promise<ReturnType> => {
+    try {
+      const response = await instance.post('/auth/signup', {
+        username,
+        email,
+        password,
+      });
+      const { user, accessToken } = response.data;
+      setAuth({ user, accessToken });
+      router.push('/');
+      return null;
+    } catch (error) {
+      return error;
+    }
   };
   return <SignUpForm signUp={signUp} />;
 }
