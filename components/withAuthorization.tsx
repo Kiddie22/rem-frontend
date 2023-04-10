@@ -8,8 +8,9 @@ interface Props {
 
 function withAuthorization<T extends Props>(
   WrappedComponent: ComponentType<T>,
+  role: string,
 ) {
-  return function Wrapper({ role, ...props }: T): JSX.Element {
+  return function Wrapper({ ...props }: T): JSX.Element {
     const { user } = useAuthData();
     if (role !== user?.role) {
       return (
