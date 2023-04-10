@@ -24,6 +24,15 @@ function Navbar(): JSX.Element {
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <FormComponents.CustomLink href="/" label="REM" />
+            {user?.role === 'owner' && (
+              <FormComponents.CustomLink
+                href="/properties"
+                label="Properties"
+              />
+            )}
+            {user?.role === 'tenant' && (
+              <FormComponents.CustomLink href="/tenant" label="Tenant" />
+            )}
           </Typography>
 
           {user?.role === 'owner' && <Chip label="OWNER" color="success" />}
