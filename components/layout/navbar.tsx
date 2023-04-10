@@ -4,13 +4,12 @@ import { useRouter } from 'next/router';
 import useAuthData from '@/hooks/useAuthData';
 import FormComponents from './form-components';
 import useAuthApi from '@/hooks/useAuthApi';
-import useAxiosInstance from '@/hooks/useAxiosInstance';
+import instance from '@/api/axios-instance';
 
 function Navbar(): JSX.Element {
   const router = useRouter();
   const setAuth = useAuthApi();
   const { user } = useAuthData();
-  const instance = useAxiosInstance();
 
   const logout = async (): Promise<void> => {
     await instance.get('auth/logout');

@@ -12,10 +12,10 @@ const useRefreshToken = (): (() => Promise<string | null>) => {
         withCredentials: true,
       });
       if (setAuth)
-        setAuth((prev: object) => ({
-          ...prev,
+        setAuth({
+          user: response.data.user,
           accessToken: response.data.accessToken,
-        }));
+        });
       return response.data.accessToken;
     } catch (error) {
       router.push('/login');

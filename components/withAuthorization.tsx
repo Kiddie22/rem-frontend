@@ -1,8 +1,15 @@
 import Link from 'next/link';
+import { ComponentType } from 'react';
 import useAuthData from '@/hooks/useAuthData';
 
-function withAuthorization(WrappedComponent, role: string): () => JSX.Element {
-  function Wrapper(props): JSX.Element {
+interface Props {
+  role: string;
+}
+
+function withAuthorization<T extends Props>(
+  WrappedComponent: ComponentType<T>,
+) {
+  return function Wrapper({ role, ...props }: T): JSX.Element {
     const { user } = useAuthData();
     if (role !== user?.role) {
       return (
@@ -13,11 +20,8 @@ function withAuthorization(WrappedComponent, role: string): () => JSX.Element {
       );
     }
 
-    // If the user's role is allowed, render the wrapped component
-    return <WrappedComponent {...props} />;
-  }
-
-  return Wrapper();
+    return <WrappedComponent {...(props as T)} />;
+  };
 }
 
 export default withAuthorization;

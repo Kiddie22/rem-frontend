@@ -1,5 +1,5 @@
 import { Container } from '@mui/material';
-import withAuthorization from '@/components/auth/withAuthorization';
+import withAuthorization from '@/components/withAuthorization';
 
 function TenantPage(): JSX.Element {
   return (
