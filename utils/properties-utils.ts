@@ -4,6 +4,8 @@ export type Property = {
   id: string;
   propertyName: string;
   propertyType: string;
+  location: string;
+  squareFeet: number;
   noOfBedrooms: number;
   noOfBathrooms: number;
 };

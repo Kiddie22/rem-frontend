@@ -11,6 +11,8 @@ import { Property } from '@/utils/properties-utils';
 const initialFormValues = {
   propertyName: '',
   propertyType: 'House',
+  location: '',
+  squareFeet: 0,
   noOfBedrooms: 0,
   noOfBathrooms: 0,
 };
@@ -34,6 +36,8 @@ function CreatePropertyForm(props: PropTypes): JSX.Element {
     values: {
       propertyName: string;
       propertyType: string;
+      location: string;
+      squareFeet: number;
       noOfBedrooms: number;
       noOfBathrooms: number;
     },
@@ -43,6 +47,8 @@ function CreatePropertyForm(props: PropTypes): JSX.Element {
       const res = await instance.post('properties', {
         propertyName: values.propertyName,
         propertyType: values.propertyType,
+        location: values.location,
+        squareFeet: Number(values.squareFeet),
         noOfBedrooms: Number(values.noOfBedrooms),
         noOfBathrooms: Number(values.noOfBathrooms),
       });
@@ -80,6 +86,18 @@ function CreatePropertyForm(props: PropTypes): JSX.Element {
             <MenuItem value="Apartment">Apartment</MenuItem>
             <MenuItem value="Mobile">Mobile</MenuItem>
           </Field>
+          <Field
+            component={FormComponents.CustomTextField}
+            name="location"
+            type="text"
+            label="Location"
+          />
+          <Field
+            component={FormComponents.CustomTextField}
+            name="squareFeet"
+            type="text"
+            label="Square Feet"
+          />
           <Field
             component={FormComponents.CustomTextField}
             name="noOfBedrooms"

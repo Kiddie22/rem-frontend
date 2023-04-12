@@ -7,6 +7,10 @@ function PropertiesPage(): JSX.Element {
     <Container
       style={{
         textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <h1>Properties</h1>
