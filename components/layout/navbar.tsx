@@ -26,7 +26,7 @@ function Navbar(): JSX.Element {
             {user?.role === 'owner' && (
               <FormComponents.CustomLink
                 href="/properties"
-                label="Properties"
+                label="My Properties"
               />
             )}
             {user?.role === 'tenant' && (
