@@ -1,5 +1,4 @@
 import { Container } from '@mui/material';
-import withAuthorization from '@/components/withAuthorization';
 import PropertyList from '@/components/properties/property-list';
 
 function PropertiesPage(): JSX.Element {
@@ -19,4 +18,4 @@ function PropertiesPage(): JSX.Element {
   );
 }
 
-export default withAuthorization(PropertiesPage, 'owner');
+export default PropertiesPage;

@@ -23,23 +23,19 @@ function Navbar(): JSX.Element {
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <FormComponents.CustomLink href="/" label="REM" />
-            {user?.role === 'owner' && (
-              <FormComponents.CustomLink
-                href="/properties"
-                label="My Properties"
-              />
-            )}
-            {user?.role === 'tenant' && (
-              <FormComponents.CustomLink href="/tenant" label="Tenant" />
-            )}
+            <FormComponents.CustomLink
+              href="/properties"
+              label="My Properties"
+            />
+            <FormComponents.CustomLink href="/listings" label="Listings" />
           </Typography>
-
-          {user?.role === 'owner' && <Chip label="OWNER" color="success" />}
-          {user?.role === 'tenant' && <Chip label="TENANT" color="error" />}
 
           {user?.username ? (
             <>
-              <Chip label={`Welcome ${user.username}`} />
+              <Chip
+                label={`Welcome, ${user.username}`.toUpperCase()}
+                style={{ color: 'white' }}
+              />
               <Button onClick={logout} variant="contained" color="info">
                 Logout
               </Button>

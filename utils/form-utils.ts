@@ -13,14 +13,12 @@ export type SignUpFunction = (
   username: string,
   email: string,
   password: string,
-  isOwner: boolean,
 ) => Promise<ReturnType>;
 
 export type SignUpValues = {
   username: string;
   email: string;
   password: string;
-  isOwner: boolean;
 };
 
 export type SignUpProps = { signUp: SignUpFunction };
