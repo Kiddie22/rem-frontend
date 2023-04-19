@@ -13,12 +13,15 @@ function SignUpPage(): JSX.Element {
     username: string,
     email: string,
     password: string,
+    isOwner: boolean,
   ): Promise<ReturnType> => {
     try {
+      const role = isOwner ? 'owner' : 'tenant';
       const response = await instance.post('/auth/signup', {
         username,
         email,
         password,
+        role,
       });
       const { user, accessToken } = response.data;
       setAuth({ user, accessToken });

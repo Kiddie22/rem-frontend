@@ -21,7 +21,6 @@ export default function CustomTextField(props: TextFieldProps): JSX.Element {
       margin="normal"
       required
       fullWidth
-      autoFocus
     />
   );
 }
