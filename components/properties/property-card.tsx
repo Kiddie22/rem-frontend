@@ -1,4 +1,5 @@
 import {
+  Button,
   CardContent,
   CardMedia,
   Divider,
@@ -10,6 +11,7 @@ import HotelIcon from '@mui/icons-material/Hotel';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import Link from 'next/link';
 import { Property } from '@/utils/properties-utils';
+import { Can } from '@/context/CanProvider';
 
 function PropertyCard(props: { property: Property }): JSX.Element {
   const { property } = props;
@@ -67,6 +69,15 @@ function PropertyCard(props: { property: Property }): JSX.Element {
                 : `${property.noOfBathrooms} bathrooms`}
             </>
           </Stack>
+          <Can do="read" on="Property">
+            <Button>Read</Button>
+          </Can>
+          <Can do="edit" on="Property">
+            <Button>Edit</Button>
+          </Can>
+          <Can do="delete" on="Property">
+            <Button>Delete</Button>
+          </Can>
         </CardContent>
       </Link>
     </Paper>
