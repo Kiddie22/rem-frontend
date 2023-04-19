@@ -14,6 +14,7 @@ function PropertyList(): JSX.Element {
   useEffect(() => {
     const fetchProperties = async (): Promise<void> => {
       const response = await instance.get('properties');
+      console.log(response);
       setProperties(response.data);
     };
 

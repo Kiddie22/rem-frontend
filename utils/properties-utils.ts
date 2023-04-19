@@ -8,6 +8,11 @@ export type Property = {
   squareFeet: number;
   noOfBedrooms: number;
   noOfBathrooms: number;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
 };
 
 export type PropertiesContextDataType = Property[];
