@@ -1,43 +1,21 @@
-import {
-  Button,
-  CardContent,
-  CardMedia,
-  Divider,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, CardContent, Typography } from '@mui/material';
 import HotelIcon from '@mui/icons-material/Hotel';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import Link from 'next/link';
 import { subject } from '@casl/ability';
 import { Property } from '@/utils/properties-utils';
-import { Can } from '@/context/CanProvider';
+import { Can } from '@/context/CaslProvider';
+import CardComponents from '../layout/card-components';
 
 function PropertyCard(props: { property: Property }): JSX.Element {
   const { property } = props;
   return (
-    <Paper
-      elevation={6}
-      style={{
-        borderWidth: '5px',
-        borderRadius: '5%',
-      }}
-    >
+    <CardComponents.CardPaper>
       <Link
         href={`properties/${property.id}`}
         style={{ textDecoration: 'inherit', color: 'inherit' }}
       >
-        <CardMedia
-          component="img"
-          height="300px"
-          image="cover.svg"
-          alt="Property Image"
-          style={{
-            borderTopLeftRadius: '5%',
-            borderTopRightRadius: '5%',
-          }}
-        />
+        <CardComponents.CustomCardMedia src="cover.svg" alt="Property Image" />
         <CardContent>
           <Typography
             sx={{ fontSize: 14, textAlign: 'center' }}
@@ -48,15 +26,7 @@ function PropertyCard(props: { property: Property }): JSX.Element {
           <Typography variant="h6" component="div" textAlign="center">
             {property.propertyName}
           </Typography>
-          <Stack
-            direction="row"
-            paddingTop={1}
-            color="text.secondary"
-            divider={<Divider orientation="vertical" flexItem />}
-            fontSize={14}
-            spacing={1}
-            justifyContent="center"
-          >
+          <CardComponents.CardStack>
             <>
               <HotelIcon />
               {property.noOfBedrooms === 1
@@ -69,7 +39,7 @@ function PropertyCard(props: { property: Property }): JSX.Element {
                 ? '1 bathroom'
                 : `${property.noOfBathrooms} bathrooms`}
             </>
-          </Stack>
+          </CardComponents.CardStack>
           <Can do="read" this={subject('Property', property)}>
             <Button>Read</Button>
           </Can>
@@ -81,7 +51,7 @@ function PropertyCard(props: { property: Property }): JSX.Element {
           </Can>
         </CardContent>
       </Link>
-    </Paper>
+    </CardComponents.CardPaper>
   );
 }
 

@@ -1,5 +1,5 @@
 import { AuthProvider } from './AuthProvider';
-import { CanProvider } from './CanProvider';
+import { CaslProvider } from './CaslProvider';
 import { PropertiesProvider } from './PropertiesProvider';
 
 function Providers(props: { children: React.ReactNode }): JSX.Element {
@@ -7,7 +7,7 @@ function Providers(props: { children: React.ReactNode }): JSX.Element {
   return (
     <AuthProvider>
       <PropertiesProvider>
-        <CanProvider>{children}</CanProvider>
+        <CaslProvider>{children}</CaslProvider>
       </PropertiesProvider>
     </AuthProvider>
   );
