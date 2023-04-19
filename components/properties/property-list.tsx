@@ -13,12 +13,8 @@ function PropertyList(): JSX.Element {
 
   useEffect(() => {
     const fetchProperties = async (): Promise<void> => {
-      try {
-        const response = await instance.get('properties');
-        setProperties(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      const response = await instance.get('properties');
+      setProperties(response.data);
     };
 
     fetchProperties();
