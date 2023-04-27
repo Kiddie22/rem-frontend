@@ -1,9 +1,9 @@
 import { Container, Divider, Paper, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import HotelIcon from '@mui/icons-material/Hotel';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import { useQuery } from '@tanstack/react-query';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
 import { Property } from '@/utils/properties-utils';
 
@@ -11,26 +11,16 @@ function PropertyDetailsPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
   const instance = useAxiosInstance();
-  const [property, setProperty] = useState<Property>();
-  const [isError, setIsError] = useState(false);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProperty = async (): Promise<void> => {
-      try {
-        const response = await instance.get(`properties/${id}`);
-        setProperty(response.data);
-      } catch (err) {
-        setIsError(true);
-        setError(err);
-      }
-    };
-    if (id) fetchProperty();
-  }, [id, instance]);
+  const fetchProperty = async (): Promise<void> => {
+    const response = await instance.get(`properties/${id}`);
+    return response.data;
+  };
 
-  if (isError) {
-    return <h1>{error}</h1>;
-  }
+  const { data: property }: { property: Property } = useQuery(
+    ['property', id],
+    fetchProperty,
+  );
 
   return (
     <Container
@@ -45,7 +35,7 @@ function PropertyDetailsPage(): JSX.Element {
           borderRadius: '5%',
           paddingTop: '10px',
           marginTop: '100px',
-          backgroundColor:'#F9F5EB'
+          backgroundColor: '#F9F5EB',
         }}
       >
         <Typography style={{ color: '#EA5455' }} variant="button">

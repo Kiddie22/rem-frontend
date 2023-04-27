@@ -13,7 +13,6 @@ export default function CustomSubmitButton(
   const { children, isSubmitting, submitForm } = props;
   return (
     <Button
-      type="submit"
       fullWidth
       variant="contained"
       disabled={isSubmitting}

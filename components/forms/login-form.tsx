@@ -1,39 +1,54 @@
 import { useState } from 'react';
-import * as yup from 'yup';
 import { Alert, LinearProgress } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
+import { useMutation } from '@tanstack/react-query';
+import { AuthContextDataType } from '@/utils/auth-utils';
 import FormComponents from '../layout/form-components';
+import useAuthApi from '@/hooks/useAuthApi';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { SetSubmitting, extractResponse } from '@/utils/form-utils';
 import {
-  LoginProps,
-  LoginValues,
-  SetSubmitting,
-  extractResponse,
-} from '@/utils/form-utils';
+  LoginValuesType,
+  initialLoginValues,
+  loginSchema,
+} from '@/utils/login-utils';
 
-const initialLoginValues = {
-  username: '',
-  password: '',
-};
-
-const loginSchema = yup.object({
-  username: yup.mixed().required('Required'),
-  password: yup.string().required('Required'),
-});
-
-function LoginForm(props: LoginProps): JSX.Element {
-  const { login } = props;
+function LoginForm(): JSX.Element {
+  const router = useRouter();
+  const instance = useAxiosInstance();
+  const setAuth = useAuthApi();
   const [errorMessage, setErrorMessage] = useState('');
 
+  const userLogin = async (values: {
+    username: string;
+    password: string;
+  }): Promise<AuthContextDataType> => {
+    const response = await instance.post('/auth/login', {
+      username: values.username,
+      password: values.password,
+    });
+    return response.data;
+  };
+
+  const userLoginMutation = useMutation({
+    mutationFn: (values: LoginValuesType) => userLogin(values),
+    onSuccess: ({ user, accessToken }) => {
+      setAuth({ user, accessToken });
+      router.push('/');
+    },
+    onError: (err: string) => {
+      const response = extractResponse(err);
+      setErrorMessage(response);
+    },
+  });
+
   const handleFormSubmit = async (
-    values: LoginValues,
+    values: LoginValuesType,
     { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
-    const { username, password } = values;
-    const responseMessage = await login(username, password);
-    if (responseMessage) {
-      const response = extractResponse(responseMessage);
-      setErrorMessage(response);
-    }
+    setSubmitting(true);
+    userLoginMutation.mutateAsync(values);
     setSubmitting(false);
   };
 

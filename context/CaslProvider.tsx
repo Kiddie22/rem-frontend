@@ -9,12 +9,14 @@ type AbilityContextType = null | MongoAbility<AbilityTuple, MongoQuery>;
 export const AbilityContext = createContext<AbilityContextType>(null);
 export const Can = createContextualCan(AbilityContext.Consumer);
 
-export function CaslProvider(props: { children: React.ReactNode }): JSX.Element {
+export function CaslProvider(props: {
+  children: React.ReactNode;
+}): JSX.Element {
   const { children } = props;
   const { user } = useAuthData();
   const userId = user?.id;
 
-  if (userId) {
+  if (user) {
     return (
       <AbilityContext.Provider value={customAbility(userId)}>
         {children}
