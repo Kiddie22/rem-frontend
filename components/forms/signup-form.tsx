@@ -1,41 +1,54 @@
 import { useState } from 'react';
-import * as yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import { Alert, LinearProgress } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import FormComponents from '../layout/form-components';
+import { AuthContextDataType } from '@/utils/auth-utils';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
+import useAuthApi from '@/hooks/useAuthApi';
+import { SetSubmitting, extractResponse } from '@/utils/form-utils';
 import {
-  SignUpProps,
   SignUpValues,
-  SetSubmitting,
-  extractResponse,
-} from '@/utils/form-utils';
+  initialSignUpValues,
+  signUpSchema,
+} from '@/utils/signup-utils';
 
-const initialSignUpValues = {
-  username: '',
-  email: '',
-  password: '',
-};
-
-const signUpSchema = yup.object({
-  username: yup.mixed().required('Required'),
-  email: yup.string().email().required('Required'),
-  password: yup.string().required('Required'),
-});
-
-function SignUpForm(props: SignUpProps): JSX.Element {
-  const { signUp } = props;
+function SignUpForm(): JSX.Element {
+  const router = useRouter();
+  const instance = useAxiosInstance();
+  const setAuth = useAuthApi();
   const [errorMessage, setErrorMessage] = useState('');
+
+  const userSignUp = async (
+    values: SignUpValues,
+  ): Promise<AuthContextDataType> => {
+    const response = await instance.post('/auth/signup', {
+      username: values.username,
+      email: values.email,
+      password: values.password,
+    });
+    return response.data;
+  };
+
+  const userSignUpMutation = useMutation({
+    mutationFn: (values: SignUpValues) => userSignUp(values),
+    onSuccess: ({ user, accessToken }) => {
+      setAuth({ user, accessToken });
+      router.push('/');
+    },
+    onError: (err: string) => {
+      const response = extractResponse(err);
+      setErrorMessage(response);
+    },
+  });
 
   const handleFormSubmit = async (
     values: SignUpValues,
     { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
-    const { username, email, password } = values;
-    const responseMessage = await signUp(username, email, password);
-    if (responseMessage) {
-      const response = extractResponse(responseMessage);
-      setErrorMessage(response);
-    }
+    setSubmitting(true);
+    userSignUpMutation.mutateAsync(values);
     setSubmitting(false);
   };
 

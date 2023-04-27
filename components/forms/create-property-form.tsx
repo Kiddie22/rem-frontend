@@ -1,63 +1,57 @@
 import { Form, Formik, Field } from 'formik';
-import * as yup from 'yup';
 import React, { useState } from 'react';
 import { Alert, LinearProgress, MenuItem, Select } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import FormComponents from '../layout/form-components';
 import { SetSubmitting } from '@/utils/form-utils';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
-import usePropertiesApi from '@/hooks/usePropertiesApi';
 import { Property } from '@/utils/properties-utils';
-
-const initialFormValues = {
-  propertyName: '',
-  propertyType: 'House',
-  location: '',
-  squareFeet: 0,
-  noOfBedrooms: 0,
-  noOfBathrooms: 0,
-};
-
-const loginSchema = yup.object({
-  propertyName: yup.string().required('Required'),
-  propertyType: yup.string().required('Required'),
-  noOfBedrooms: yup.number().required('Required'),
-  noOfBathrooms: yup.number().required('Required'),
-});
-
-type PropTypes = { handleClose: () => void };
+import {
+  PropTypes,
+  UpdatePropertiesMutation,
+  ValuesType,
+  initialFormValues,
+  loginSchema,
+} from '@/utils/propety-form-utils';
+import queryKeys from '@/react-query/contants';
 
 function CreatePropertyForm(props: PropTypes): JSX.Element {
   const { handleClose } = props;
   const [errorMessage, setErrorMessage] = useState('');
   const instance = useAxiosInstance();
-  const setProperties = usePropertiesApi();
+  const queryClient = useQueryClient();
+
+  const createProperty = async (values: ValuesType): Promise<Property> => {
+    const res = await instance.post('properties', {
+      propertyName: values.propertyName,
+      propertyType: values.propertyType,
+      location: values.location,
+      squareFeet: Number(values.squareFeet),
+      noOfBedrooms: Number(values.noOfBedrooms),
+      noOfBathrooms: Number(values.noOfBathrooms),
+    });
+    return res.data;
+  };
+
+  const updatePropertiesMutation: UpdatePropertiesMutation = useMutation({
+    mutationFn: (values: ValuesType) => createProperty(values),
+    onSuccess: () => {
+      handleClose();
+    },
+    onError: (error: Error) => {
+      setErrorMessage(error.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries([queryKeys.properties]);
+    },
+  });
 
   const handleFormSubmit = async (
-    values: {
-      propertyName: string;
-      propertyType: string;
-      location: string;
-      squareFeet: number;
-      noOfBedrooms: number;
-      noOfBathrooms: number;
-    },
+    values: ValuesType,
     { setSubmitting }: SetSubmitting,
   ): Promise<void> => {
-    try {
-      const res = await instance.post('properties', {
-        propertyName: values.propertyName,
-        propertyType: values.propertyType,
-        location: values.location,
-        squareFeet: Number(values.squareFeet),
-        noOfBedrooms: Number(values.noOfBedrooms),
-        noOfBathrooms: Number(values.noOfBathrooms),
-      });
-      const newProperty: Property = res.data;
-      setProperties((prevValue) => [...prevValue, newProperty]);
-      handleClose();
-    } catch (error) {
-      setErrorMessage(error);
-    }
+    setSubmitting(true);
+    await updatePropertiesMutation.mutateAsync(values);
     setSubmitting(false);
   };
 

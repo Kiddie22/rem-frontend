@@ -24,18 +24,18 @@ const useAxiosInstance = (): AxiosInstance => {
       (response) => response,
       async (err) => {
         const originalConfig = err.config;
-        const errData = err.response.data;
+        const errData = err.response?.data;
         if (
-          (err.response.status === 400 && errData) ||
-          (err.response.status === 403 && errData) ||
-          (err.response.status === 409 && errData)
+          (err.response?.status === 400 && errData) ||
+          (err.response?.status === 403 && errData) ||
+          (err.response?.status === 409 && errData)
         ) {
           return Promise.reject(errData.message);
         }
 
         // refresh access token
         if (
-          err.response.status === 401 &&
+          err.response?.status === 401 &&
           !originalConfig.retry &&
           !err.request.responseURL.includes('auth/refresh')
         ) {
