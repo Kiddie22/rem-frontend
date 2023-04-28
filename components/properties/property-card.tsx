@@ -1,10 +1,8 @@
-import { Button, CardContent, Typography } from '@mui/material';
+import { CardContent, Typography } from '@mui/material';
 import HotelIcon from '@mui/icons-material/Hotel';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import Link from 'next/link';
-import { subject } from '@casl/ability';
 import { Property } from '@/utils/properties-utils';
-import { Can } from '@/context/CaslProvider';
 import CardComponents from '../layout/card-components';
 
 function PropertyCard(props: { property: Property }): JSX.Element {
@@ -40,15 +38,6 @@ function PropertyCard(props: { property: Property }): JSX.Element {
                 : `${property.noOfBathrooms} bathrooms`}
             </>
           </CardComponents.CardStack>
-          <Can do="read" this={subject('Property', property)}>
-            <Button>Read</Button>
-          </Can>
-          <Can do="edit" this={subject('Property', property)}>
-            <Button>Edit</Button>
-          </Can>
-          <Can do="delete" this={subject('Property', property)}>
-            <Button>Delete</Button>
-          </Can>
         </CardContent>
       </Link>
     </CardComponents.CardPaper>

@@ -1,26 +1,43 @@
-import { Container, Divider, Paper, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import HotelIcon from '@mui/icons-material/Hotel';
-import BathtubIcon from '@mui/icons-material/Bathtub';
+import {
+  Button,
+  Container,
+  Divider,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import SquareFootIcon from '@mui/icons-material/SquareFoot';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { subject } from '@casl/ability';
+import { useRouter } from 'next/router';
+import BathtubIcon from '@mui/icons-material/Bathtub';
+import HotelIcon from '@mui/icons-material/Hotel';
+import { Can } from '@/context/CaslProvider';
 import { Property } from '@/utils/properties-utils';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
+import {
+  useDelistProperty,
+  useListProperty,
+} from '@/hooks/react-query/useProperties';
+import queryKeys from '@/react-query/contants';
 
 function PropertyDetailsPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
   const instance = useAxiosInstance();
+  const listPropertyMutation = useListProperty();
+  const delistPropertyMutation = useDelistProperty();
 
   const fetchProperty = async (): Promise<void> => {
     const response = await instance.get(`properties/${id}`);
     return response.data;
   };
 
-  const { data: property }: { property: Property } = useQuery(
-    ['property', id],
-    fetchProperty,
-  );
+  const { data: property }: { property: Property } = useQuery({
+    queryKey: [queryKeys.properties, id],
+    queryFn: fetchProperty,
+    enabled: !!id,
+  });
 
   return (
     <Container
@@ -70,6 +87,25 @@ function PropertyDetailsPage(): JSX.Element {
             {`${property?.squareFeet} sq ft.`}
           </>
         </Stack>
+        <Can do="edit" this={subject('Property', property)}>
+          <Button>Edit</Button>
+        </Can>
+        <Can do="delete" this={subject('Property', property)}>
+          <Button>Delete</Button>
+        </Can>
+        {property?.isListed ? (
+          <Button
+            onClick={(): void => delistPropertyMutation.mutate(property?.id)}
+          >
+            Delist
+          </Button>
+        ) : (
+          <Button
+            onClick={(): void => listPropertyMutation.mutate(property?.id)}
+          >
+            List
+          </Button>
+        )}
       </Paper>
     </Container>
   );

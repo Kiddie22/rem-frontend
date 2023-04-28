@@ -3,7 +3,7 @@ import PropertyCard from './property-card';
 import CreateProperty from './create-property';
 import useProperties from '@/hooks/react-query/useProperties';
 
-function PropertyList(): JSX.Element {
+function UserList(): JSX.Element {
   const properties = useProperties();
 
   return (
@@ -22,4 +22,4 @@ function PropertyList(): JSX.Element {
   );
 }
 
-export default PropertyList;
+export default UserList;
