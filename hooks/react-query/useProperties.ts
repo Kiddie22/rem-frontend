@@ -10,15 +10,17 @@ import queryKeys from '@/react-query/contants';
 import {
   delistProperty,
   fetchListedProperties,
-  fetchProperties,
+  fetchUserProperties,
   listProperty,
 } from './properties-axios-funcs';
+import useAuthData from '../useAuthData';
 
-export default function useProperties(): Property[] | undefined {
+export default function useUserProperties(): Property[] | undefined {
   const instance = useAxiosInstance();
+  const { user } = useAuthData();
   const { data } = useQuery({
     queryKey: [queryKeys.properties],
-    queryFn: () => fetchProperties(instance),
+    queryFn: () => fetchUserProperties(user.id, instance),
   });
   return data;
 }
@@ -35,9 +37,10 @@ export function useListedProperties(): Property[] | undefined {
 export function usePrefetchProperties(): void {
   const queryClient = useQueryClient();
   const instance = useAxiosInstance();
+  const { user } = useAuthData();
   queryClient.prefetchQuery({
     queryKey: [queryKeys.properties],
-    queryFn: () => fetchProperties(instance),
+    queryFn: () => fetchUserProperties(user.id, instance),
   });
 }
 
