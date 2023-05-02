@@ -9,7 +9,12 @@ export type Property = {
   noOfBedrooms: number;
   noOfBathrooms: number;
   isListed: boolean;
-  user: {
+  owner: {
+    id: string;
+    username: string;
+    email: string;
+  };
+  tenant: {
     id: string;
     username: string;
     email: string;

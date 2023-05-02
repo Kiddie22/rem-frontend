@@ -5,7 +5,7 @@ export const fetchUserProperties = async (
   userId: string,
   axiosInstance: AxiosInstance,
 ): Promise<Property[]> => {
-  const response = await axiosInstance.get(`properties?userId=${userId}`);
+  const response = await axiosInstance.get(`properties?ownerId=${userId}`);
   return response.data;
 };
 
