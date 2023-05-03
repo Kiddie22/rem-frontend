@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { Property } from '@/utils/properties-utils';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
 import queryKeys from '@/react-query/contants';
-import PropertyDetails from '@/components/properties/detailed-property-widgets/property-details';
+import PropertyDetailsHeader from '@/components/properties/detailed-property-widgets/property-details-header';
 import PropertyTenantDetails from '@/components/properties/detailed-property-widgets/property-tenant-details';
 import PropertyDetailsCommands from '@/components/properties/detailed-property-widgets/property-details-commands';
 
@@ -29,7 +29,7 @@ function PropertyDetailsPage(): JSX.Element {
       <Grid container spacing={3} pt={3}>
         <Grid item md={12}>
           <Box boxShadow={8} p={2}>
-            <PropertyDetails property={property} />
+            <PropertyDetailsHeader property={property} />
           </Box>
         </Grid>
         <PropertyDetailsCommands property={property} />
