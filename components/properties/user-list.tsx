@@ -1,10 +1,10 @@
 import { Box, Grid } from '@mui/material';
 import PropertyCard from './property-card';
 import CreateProperty from './create-property';
-import useProperties from '@/hooks/react-query/useProperties';
+import useUserProperties from '@/hooks/react-query/useProperties';
 
-function PropertyList(): JSX.Element {
-  const properties = useProperties();
+function UserList(): JSX.Element {
+  const properties = useUserProperties();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -22,4 +22,4 @@ function PropertyList(): JSX.Element {
   );
 }
 
-export default PropertyList;
+export default UserList;

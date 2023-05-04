@@ -1,5 +1,5 @@
 import { Container } from '@mui/material';
-import PropertyList from '@/components/properties/property-list';
+import UserList from '@/components/properties/user-list';
 
 function PropertiesPage(): JSX.Element {
   return (
@@ -13,7 +13,7 @@ function PropertiesPage(): JSX.Element {
       }}
     >
       <h1>Properties</h1>
-      <PropertyList />
+      <UserList />
     </Container>
   );
 }

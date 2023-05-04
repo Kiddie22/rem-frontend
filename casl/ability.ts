@@ -10,8 +10,8 @@ const customAbility = (
 ): MongoAbility<AbilityTuple, MongoQuery> =>
   defineAbility((can) => {
     can('read', 'Property');
-    can('edit', 'Property', { 'user.id': userId });
-    can('delete', 'Property', { 'user.id': userId });
+    can('edit', 'Property', { 'owner.id': userId });
+    can('delete', 'Property', { 'owner.id': userId });
   });
 
 export default customAbility;

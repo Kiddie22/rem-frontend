@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { Property } from './properties-utils';
 import { UseMutationResult } from '@tanstack/react-query';
+import { Property } from './properties-utils';
 
 export const initialFormValues = {
   propertyName: '',

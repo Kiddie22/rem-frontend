@@ -1,11 +1,14 @@
-import { Container, Divider, Paper, Stack, Typography } from '@mui/material';
-import { useRouter } from 'next/router';
-import HotelIcon from '@mui/icons-material/Hotel';
-import BathtubIcon from '@mui/icons-material/Bathtub';
-import SquareFootIcon from '@mui/icons-material/SquareFoot';
+import { Box, Container, Grid } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosInstance from '@/hooks/useAxiosInstance';
+import { useRouter } from 'next/router';
 import { Property } from '@/utils/properties-utils';
+import useAxiosInstance from '@/hooks/useAxiosInstance';
+import queryKeys from '@/react-query/contants';
+import PropertyDetailsHeader from '@/components/properties/detailed-property-widgets/property-details-header';
+import PropertyTenantDetails from '@/components/properties/detailed-property-widgets/property-tenant-details';
+import PropertyDetailsCommands from '@/components/properties/detailed-property-widgets/property-details-commands';
+
+type PropTypes = { property: Property };
 
 function PropertyDetailsPage(): JSX.Element {
   const router = useRouter();
@@ -17,60 +20,27 @@ function PropertyDetailsPage(): JSX.Element {
     return response.data;
   };
 
-  const { data: property }: { property: Property } = useQuery(
-    ['property', id],
-    fetchProperty,
-  );
+  const { data: property }: PropTypes = useQuery({
+    queryKey: [queryKeys.properties, id],
+    queryFn: fetchProperty,
+    enabled: !!id,
+  });
 
   return (
-    <Container
-      style={{
-        textAlign: 'center',
-      }}
-    >
-      <Paper
-        elevation={2}
-        style={{
-          borderWidth: '5px',
-          borderRadius: '5%',
-          paddingTop: '10px',
-          marginTop: '100px',
-          backgroundColor: '#F9F5EB',
-        }}
-      >
-        <Typography style={{ color: '#EA5455' }} variant="button">
-          {property?.propertyType.toUpperCase()}
-        </Typography>
-        <Typography variant="h3">{property?.propertyName}</Typography>
-        <Typography variant="body1">{property?.location}</Typography>
-        <Stack
-          direction="row"
-          paddingTop={1}
-          color="text.secondary"
-          divider={<Divider orientation="vertical" flexItem />}
-          fontSize={14}
-          spacing={3}
-          justifyContent="center"
-          paddingBottom={3}
-        >
-          <>
-            <HotelIcon />
-            {property?.noOfBedrooms === 1
-              ? '1 bedroom'
-              : `${property?.noOfBedrooms} bedrooms`}
-          </>
-          <>
-            <BathtubIcon />
-            {property?.noOfBathrooms === 1
-              ? '1 bathroom'
-              : `${property?.noOfBathrooms} bathrooms`}
-          </>
-          <>
-            <SquareFootIcon />
-            {`${property?.squareFeet} sq ft.`}
-          </>
-        </Stack>
-      </Paper>
+    <Container>
+      <Grid container spacing={3} pt={3}>
+        <Grid item md={12}>
+          <Box boxShadow={8} p={2}>
+            <PropertyDetailsHeader property={property} />
+          </Box>
+        </Grid>
+        <PropertyDetailsCommands property={property} />
+        <Grid item md={8}>
+          <Box boxShadow={8} p={2}>
+            <PropertyTenantDetails />
+          </Box>
+        </Grid>
+      </Grid>
     </Container>
   );
 }
