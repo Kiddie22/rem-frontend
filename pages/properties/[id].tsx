@@ -8,6 +8,8 @@ import PropertyDetailsHeader from '@/components/properties/detailed-property-wid
 import PropertyTenantDetails from '@/components/properties/detailed-property-widgets/property-tenant-details';
 import PropertyDetailsCommands from '@/components/properties/detailed-property-widgets/property-details-commands';
 
+type PropTypes = { property: Property };
+
 function PropertyDetailsPage(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
@@ -18,7 +20,7 @@ function PropertyDetailsPage(): JSX.Element {
     return response.data;
   };
 
-  const { data: property }: { property: Property } = useQuery({
+  const { data: property }: PropTypes = useQuery({
     queryKey: [queryKeys.properties, id],
     queryFn: fetchProperty,
     enabled: !!id,
