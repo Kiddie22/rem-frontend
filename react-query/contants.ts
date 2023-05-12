@@ -1,5 +1,6 @@
 const queryKeys = {
   properties: 'properties',
+  tasks: 'tasks',
   auth: 'auth',
 };
 
