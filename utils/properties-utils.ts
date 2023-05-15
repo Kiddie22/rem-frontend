@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { User } from './user-utils';
 
 export type Property = {
   id: string;
@@ -9,16 +10,8 @@ export type Property = {
   noOfBedrooms: number;
   noOfBathrooms: number;
   isListed: boolean;
-  owner: {
-    id: string;
-    username: string;
-    email: string;
-  };
-  tenant: {
-    id: string;
-    username: string;
-    email: string;
-  };
+  owner: User;
+  tenant: User;
 };
 
 export type PropertiesContextDataType = Property[];

@@ -1,13 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
+import { User } from './user-utils';
 
 export type AuthContextDataType =
   | {
       accessToken: string;
-      user: {
-        id: string;
-        username: string;
-        email: string;
-      };
+      user: User;
     }
   | Record<string, never>;
 
