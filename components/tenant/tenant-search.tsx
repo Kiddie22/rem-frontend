@@ -3,12 +3,10 @@ import Select from 'react-select';
 import { Button } from '@mui/material';
 import { User } from '@/utils/user-utils';
 import useAxiosInstance from '@/hooks/useAxiosInstance';
-import { Property } from '@/utils/properties-utils';
+import { useAddTenantMutation } from '@/hooks/react-query/useTenants';
 
-type PropsType = { property: Property };
-
-function TenantSearch(props: PropsType): JSX.Element {
-  const { property } = props;
+function TenantSearch(): JSX.Element {
+  const addTenantMutation = useAddTenantMutation();
   const [, setInputValue] = useState('');
   const instance = useAxiosInstance();
   const [options, setOptions] = useState([]);
@@ -16,7 +14,7 @@ function TenantSearch(props: PropsType): JSX.Element {
 
   useEffect(() => {
     const fetchUsers = async (): Promise<void> => {
-      const response = await instance.get('http://localhost:3000/users/');
+      const response = await instance.get('users');
       const { data } = response;
 
       const formattedOptions = data.map((user: User) => ({
@@ -38,14 +36,6 @@ function TenantSearch(props: PropsType): JSX.Element {
     setSelectedOption(selected);
   };
 
-  const addTenant = async (): Promise<void> => {
-    const response = await instance.post(
-      `http://localhost:3000/properties/${property.id}/tenant/`,
-      { userId: selectedOption?.value },
-    );
-    console.log(response);
-  };
-
   return (
     <>
       <Select
@@ -55,7 +45,11 @@ function TenantSearch(props: PropsType): JSX.Element {
         options={options}
         placeholder="Add tenant..."
       />
-      <Button variant="contained" onClick={addTenant}>
+      <Button
+        variant="outlined"
+        onClick={(): void => addTenantMutation.mutate(selectedOption?.value)}
+        style={{ marginTop: '10px' }}
+      >
         Add Tenant
       </Button>
     </>
