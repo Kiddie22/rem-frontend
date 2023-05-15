@@ -7,6 +7,7 @@ import queryKeys from '@/react-query/contants';
 import PropertyDetailsHeader from '@/components/properties/detailed-property-widgets/property-details-header';
 import PropertyTenantDetails from '@/components/properties/detailed-property-widgets/property-tenant-details';
 import PropertyDetailsCommands from '@/components/properties/detailed-property-widgets/property-details-commands';
+import PropertyDetailsTasks from '@/components/properties/detailed-property-widgets/property-details-tasks';
 
 type PropTypes = { property: Property };
 
@@ -30,14 +31,19 @@ function PropertyDetailsPage(): JSX.Element {
     <Container>
       <Grid container spacing={3} pt={3}>
         <Grid item md={12}>
-          <Box boxShadow={8} p={2}>
+          <Box boxShadow={1} p={2}>
             <PropertyDetailsHeader property={property} />
           </Box>
         </Grid>
         <PropertyDetailsCommands property={property} />
-        <Grid item md={8}>
-          <Box boxShadow={8} p={2}>
+        <Grid item md={6}>
+          <Box boxShadow={1} p={2}>
             <PropertyTenantDetails />
+          </Box>
+        </Grid>
+        <Grid item md={6}>
+          <Box boxShadow={1} p={2}>
+            <PropertyDetailsTasks propertyId={id} />
           </Box>
         </Grid>
       </Grid>

@@ -10,8 +10,8 @@ function CanEditProperty(props: PropsType): JSX.Element {
 
   return (
     <Can do="edit" this={subject('Property', property)}>
-      <Grid item md={4}>
-        <Box boxShadow={8} p={2}>
+      <Grid item md={12}>
+        <Box boxShadow={1} p={2}>
           {children}
         </Box>
       </Grid>
