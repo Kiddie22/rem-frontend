@@ -38,12 +38,12 @@ function PropertyDetailsPage(): JSX.Element {
         <PropertyDetailsCommands property={property} />
         <Grid item md={6}>
           <Box boxShadow={1} p={2}>
-            <PropertyTenantDetails property={property}/>
+            <PropertyTenantDetails property={property} />
           </Box>
         </Grid>
         <Grid item md={6}>
           <Box boxShadow={1} p={2}>
-            <PropertyDetailsTasks propertyId={id} />
+            <PropertyDetailsTasks />
           </Box>
         </Grid>
       </Grid>
