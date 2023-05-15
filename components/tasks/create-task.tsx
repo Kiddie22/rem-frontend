@@ -3,10 +3,7 @@ import { useState } from 'react';
 import CreateTaskForm from '../forms/create-task-form';
 import style from '@/utils/modal-utils';
 
-type PropsType = { propertyId: string | string[] | undefined };
-
-function CreateTask(props: PropsType): JSX.Element {
-  const { propertyId } = props;
+function CreateTask(): JSX.Element {
   const [open, setOpen] = useState(false);
   const handleOpen = (): void => setOpen(true);
   const handleClose = (): void => setOpen(false);
@@ -27,7 +24,7 @@ function CreateTask(props: PropsType): JSX.Element {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <CreateTaskForm handleClose={handleClose} propertyId={propertyId} />
+          <CreateTaskForm handleClose={handleClose} />
         </Box>
       </Modal>
     </>

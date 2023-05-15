@@ -13,12 +13,14 @@ import {
   initialFormValues,
   taskCreationSchema,
 } from '@/utils/task-form-utils';
+import usePropertyId from '@/hooks/usePropertyId';
 
 function CreateTaskForm(props: PropsType): JSX.Element {
-  const { handleClose, propertyId } = props;
+  const { handleClose } = props;
   const [errorMessage, setErrorMessage] = useState('');
   const instance = useAxiosInstance();
   const queryClient = useQueryClient();
+  const propertyId = usePropertyId();
 
   const createTask = async (values: ValuesType): Promise<Property> => {
     const res = await instance.post(`properties/${propertyId}/tasks`, {

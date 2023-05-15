@@ -18,7 +18,7 @@ function TasksList(): JSX.Element {
             </Grid>
           ))}
         <Grid item md={12}>
-          <CreateTask propertyId={propertyId} />
+          <CreateTask />
         </Grid>
       </Grid>
     </Box>
