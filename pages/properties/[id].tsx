@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { Property } from '@/utils/properties-utils';
@@ -30,22 +30,10 @@ function PropertyDetailsPage(): JSX.Element {
   return (
     <Container>
       <Grid container spacing={3} pt={3}>
-        <Grid item md={12}>
-          <Box boxShadow={1} p={2}>
-            <PropertyDetailsHeader property={property} />
-          </Box>
-        </Grid>
+        <PropertyDetailsHeader property={property} />
         <PropertyDetailsCommands property={property} />
-        <Grid item md={6}>
-          <Box boxShadow={1} p={2}>
-            <PropertyTenantDetails property={property} />
-          </Box>
-        </Grid>
-        <Grid item md={6}>
-          <Box boxShadow={1} p={2}>
-            <PropertyDetailsTasks />
-          </Box>
-        </Grid>
+        <PropertyTenantDetails property={property} />
+        <PropertyDetailsTasks property={property} />
       </Grid>
     </Container>
   );
