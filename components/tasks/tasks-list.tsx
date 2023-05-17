@@ -2,11 +2,10 @@ import { Box, Grid } from '@mui/material';
 import TaskCard from './task-card';
 import CreateTask from './create-task';
 import useTasks from '@/hooks/react-query/useTasks';
+import usePropertyId from '@/hooks/usePropertyId';
 
-type PropType = { propertyId: string | string[] | undefined };
-
-function TasksList(props: PropType): JSX.Element {
-  const { propertyId } = props;
+function TasksList(): JSX.Element {
+  const propertyId = usePropertyId();
   const tasks = useTasks(propertyId);
 
   return (
@@ -15,11 +14,11 @@ function TasksList(props: PropType): JSX.Element {
         {tasks &&
           tasks?.map((task) => (
             <Grid item key={task.taskId} md={12}>
-              <TaskCard task={task} propertyId={propertyId}/>
+              <TaskCard task={task} propertyId={propertyId} />
             </Grid>
           ))}
         <Grid item md={12}>
-          <CreateTask propertyId={propertyId} />
+          <CreateTask />
         </Grid>
       </Grid>
     </Box>

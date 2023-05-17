@@ -14,7 +14,6 @@ export const taskCreationSchema = yup.object({
 
 export type PropsType = {
   handleClose: () => void;
-  propertyId: string | string[] | undefined;
 };
 
 export type ValuesType = {

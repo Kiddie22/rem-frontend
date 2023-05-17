@@ -4,7 +4,7 @@ import {
   useDelistProperty,
   useListProperty,
 } from '@/hooks/react-query/useProperties';
-import CanEditProperty from '@/components/casl/can-property-edit';
+import CanPropertyAbility from '@/components/casl/can-property-ability';
 
 type PropsType = { property: Property };
 
@@ -14,7 +14,7 @@ function PropertyDetailsCommands(props: PropsType): JSX.Element {
   const delistPropertyMutation = useDelistProperty();
 
   return (
-    <CanEditProperty property={property}>
+    <CanPropertyAbility property={property} md={12} ability="edit">
       {property?.isListed ? (
         <Button
           onClick={(): void => delistPropertyMutation.mutate(property?.id)}
@@ -26,7 +26,7 @@ function PropertyDetailsCommands(props: PropsType): JSX.Element {
           List
         </Button>
       )}
-    </CanEditProperty>
+    </CanPropertyAbility>
   );
 }
 

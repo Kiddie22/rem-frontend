@@ -11,6 +11,7 @@ export default function useTasks(
   const { data } = useQuery({
     queryKey: [queryKeys.tasks],
     queryFn: () => fetchPropertyTasks(propertyId, instance),
+    enabled: !!propertyId,
   });
   return data;
 }
